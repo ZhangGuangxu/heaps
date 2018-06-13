@@ -10,7 +10,7 @@ func TestMaxIntBinaryHeap(t *testing.T) {
 		t.Error("a is not empty")
 	}
 
-	b := NewIntHeapWithSize(false, 2, 110)
+	b := NewIntHeap(false, 2, 110)
 	if !b.IsEmpty() {
 		t.Error("b is not empty")
 	}
@@ -88,4 +88,46 @@ func TestMaxIntBinaryHeap(t *testing.T) {
 		t.Errorf("h.Pop should return %v", ErrEmptyHeap)
 	}
 	h.show()
+}
+
+func TestMin4WayIntHeap(t *testing.T) {
+	h := NewMinIntHeapWithWay(false, 4)
+
+	for i, j := 0, 100; i < 21; {
+		h.Insert(j)
+		i++
+		j--
+	}
+	h.show()
+
+	v, err := h.Pop()
+	if v != 80 {
+		t.Errorf("h.Pop() got %d, want %d", v, 80)
+	}
+	if err != nil {
+		t.Errorf("h.Pop() got %v, want %v", err, nil)
+	}
+	h.show()
+
+	v, err = h.Pop()
+	if v != 81 {
+		t.Errorf("h.Pop() got %d, want %d", v, 80)
+	}
+	if err != nil {
+		t.Errorf("h.Pop() got %v, want %v", err, nil)
+	}
+	h.show()
+
+	for i := 0; i < 18; i++ {
+		h.Pop()
+	}
+	h.show()
+	v, err = h.Pop()
+	if v != 100 {
+		t.Errorf("h.Pop() got %d, want %d", v, 100)
+	}
+	v, err = h.Pop()
+	if err != ErrEmptyHeap {
+		t.Errorf("h.Pop() got %v, want %v", v, ErrEmptyHeap)
+	}
 }

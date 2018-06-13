@@ -22,16 +22,26 @@ type IntHeap struct {
 
 // NewMaxBinaryIntHeap returns an instance of a max binary IntHeap.
 func NewMaxBinaryIntHeap() *IntHeap {
-	return NewIntHeapWithSize(true, 2, 1)
+	return NewIntHeap(true, 2, 1)
 }
 
 // NewMinBinaryIntHeap returns an instance of a min binary IntHeap.
 func NewMinBinaryIntHeap() *IntHeap {
-	return NewIntHeapWithSize(false, 2, 1)
+	return NewIntHeap(false, 2, 1)
 }
 
-// NewIntHeapWithSize returns an instance of a max or min n-way IntHeap with init-size.
-func NewIntHeapWithSize(max bool, nWay int, s int) *IntHeap {
+// NewMaxIntHeapWithWay returns an instance of a max nway IntHeap.
+func NewMaxIntHeapWithWay(max bool, nWay int) *IntHeap {
+	return NewIntHeap(true, nWay, 1)
+}
+
+// NewMinIntHeapWithWay returns an instance of a min nway IntHeap.
+func NewMinIntHeapWithWay(max bool, nWay int) *IntHeap {
+	return NewIntHeap(false, nWay, 1)
+}
+
+// NewIntHeap returns an instance of a max or min n-way IntHeap with init-size.
+func NewIntHeap(max bool, nWay int, s int) *IntHeap {
 	var f func(a, b int) bool
 	if max {
 		f = func(a, b int) bool {
@@ -96,11 +106,10 @@ func (h *IntHeap) siftUp() {
 			return
 		}
 
-		r := idx % h.way
-		if r == 0 {
-			parentIdx = (idx - h.way) / h.way
+		if idx%h.way == 0 {
+			parentIdx = idx/h.way - 1
 		} else {
-			parentIdx = (idx - r) / h.way
+			parentIdx = idx/h.way
 		}
 		if h.compare(h.data[parentIdx], h.data[idx]) {
 			h.data[parentIdx], h.data[idx] = h.data[idx], h.data[parentIdx]
